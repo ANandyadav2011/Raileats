@@ -1,4 +1,3 @@
-<!-- frontend/index.html -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -15,15 +14,37 @@
 
   <main class="p-6">
     <h2 class="text-xl mb-4">Order Food On Train</h2>
-    <form class="space-y-4">
-      <input type="text" placeholder="Enter Train Number" class="border p-2 w-full" />
-      <input type="text" placeholder="Enter Station Name" class="border p-2 w-full" />
+    <form id="orderForm" class="space-y-4">
+      <input id="train" type="text" placeholder="Enter Train Number" class="border p-2 w-full" />
+      <input id="station" type="text" placeholder="Enter Station Name" class="border p-2 w-full" />
       <button type="submit" class="bg-red-600 text-white px-4 py-2">Search Food</button>
     </form>
+
+    <p id="responseMsg" class="mt-4 text-green-600 font-bold"></p>
   </main>
 
   <footer class="mt-10 p-4 text-center text-sm text-gray-500 border-t">
     &copy; 2025 RailEats. All rights reserved.
   </footer>
+
+  <script>
+    document.getElementById('orderForm').addEventListener('submit', async function(e) {
+      e.preventDefault();
+
+      const train = document.getElementById('train').value;
+      const station = document.getElementById('station').value;
+
+      const response = await fetch('http://127.0.0.1:5000/order', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ train, station })
+      });
+
+      const data = await response.json();
+      document.getElementById('responseMsg').innerText = data.message;
+    });
+  </script>
 </body>
 </html>
